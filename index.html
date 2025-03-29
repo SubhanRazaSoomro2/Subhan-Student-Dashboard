@@ -9,44 +9,49 @@
 </head>
 <body class="light-theme">
     <!-- Top Navigation -->
-    <header class="top-nav">
-        <div class="nav-container">
-            <button class="menu-toggle icon-btn" id="nav-toggle">
-                <i class="fas fa-bars"></i>
+<header class="top-nav">
+    <div class="nav-container">
+        <!-- Mobile Menu Toggle Button -->
+        <button class="menu-toggle icon-btn" id="nav-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Logo -->
+        <div class="logo">
+            <h1><i class="fas fa-graduation-cap"></i> Student Portal</h1>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="nav-links" id="nav-menu">
+            <ul>
+                <li class="active"><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="learning.html"><i class="fas fa-book-open"></i> Learning</a></li>
+                <li><a href="assignments.html"><i class="fas fa-tasks"></i> Assignments</a></li>
+                <li><a href="achievements.html"><i class="fas fa-trophy"></i> Achievements</a></li>
+                <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+            </ul>
+        </nav>
+
+        <!-- User Controls (Theme Switcher, Notifications, Profile) -->
+        <div class="user-controls">
+            <button id="theme-switcher" class="icon-btn">
+                <i class="fas fa-moon"></i>
             </button>
-            
-            <div class="logo">
-                <h1><i class="fas fa-graduation-cap"></i> Student Portal</h1>
+            <div class="notification-bell icon-btn">
+                <i class="fas fa-bell"></i>
+                <span class="badge">2</span>
             </div>
-            
-            <nav class="nav-links">
-                <ul>
-                    <li class="active"><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="learning.html"><i class="fas fa-book-open"></i> Learning</a></li>
-                    <li><a href="assignments.html"><i class="fas fa-tasks"></i> Assignments</a></li>
-                    <li><a href="achievements.html"><i class="fas fa-trophy"></i> Achievements</a></li>
-                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
-                </ul>
-            </nav>
-            
-            <div class="user-controls">
-                <button id="theme-switcher" class="icon-btn">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <div class="notification-bell icon-btn">
-                    <i class="fas fa-bell"></i>
-                    <span class="badge">2</span>
-                </div>
-                <div class="user-profile" id="user-profile-btn">
-                    <img src="https://ih1.redbubble.net/image.2513778679.2457/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="User">
-                    <div class="profile-info">
-                        <span class="user-name">Subhan Raza</span>
-                        <span class="user-email">subhan@gmail.com</span>
-                    </div>
+            <div class="user-profile" id="user-profile-btn">
+                <img src="https://ih1.redbubble.net/image.2513778679.2457/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="User">
+                <div class="profile-info">
+                    <span class="user-name">Subhan Raza</span>
+                    <span class="user-email">subhan@gmail.com</span>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</header>
+
 
     <main class="main-content">
         <!-- Welcome Section -->
