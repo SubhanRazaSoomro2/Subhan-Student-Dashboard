@@ -336,10 +336,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 document.addEventListener("DOMContentLoaded", function () {
-    const menuToggle = document.querySelector(".menu-toggle");
-    const navLinks = document.querySelector(".nav-links");
+    const menuToggle = document.getElementById("nav-toggle");
+    const navMenu = document.querySelector(".nav-links");
 
-    menuToggle.addEventListener("click", function () {
-        navLinks.classList.toggle("show");
-    });
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener("click", function () {
+            navMenu.classList.toggle("show");
+        });
+    } else {
+        console.error("Navbar toggle elements not found!");
+    }
 });
+
