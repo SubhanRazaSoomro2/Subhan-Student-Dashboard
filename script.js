@@ -55,21 +55,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Mobile menu toggle
-document.getElementById('nav-toggle')?.addEventListener('click', function(e) {
-    e.stopPropagation();
-    document.querySelector('.nav-links').classList.toggle('mobile-show');
-});
-
-// Close mobile menu when clicking outside
-document.addEventListener('click', function(e) {
-    const navLinks = document.querySelector('.nav-links');
+// Mobile menu toggle - Emergency Fix
+document.addEventListener('DOMContentLoaded', function() {
     const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.querySelector('.nav-links');
     
-    if (navLinks && navToggle && 
-        !navLinks.contains(e.target) && 
-        !navToggle.contains(e.target)) {
-        navLinks.classList.remove('mobile-show');
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('mobile-show');
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+                navMenu.classList.remove('mobile-show');
+            }
+        });
     }
 });
 // Close mobile menu when clicking a nav link
