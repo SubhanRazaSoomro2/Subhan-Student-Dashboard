@@ -56,18 +56,27 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Mobile menu toggle
-navToggle.addEventListener('click', (e) => {
+document.getElementById('nav-toggle')?.addEventListener('click', function(e) {
     e.stopPropagation();
-    const navLinks = document.querySelector('.nav-links');
-    navLinks.classList.toggle('mobile-show');
+    document.querySelector('.nav-links').classList.toggle('mobile-show');
 });
 
 // Close mobile menu when clicking outside
-document.addEventListener('click', (e) => {
-    const navToggle = document.querySelector('.nav-toggle'); // Ensure navToggle is defined
-    if (navToggle && !navToggle.contains(e.target)) {
-        document.querySelector('.nav-links').classList.remove('mobile-show');
+document.addEventListener('click', function(e) {
+    const navLinks = document.querySelector('.nav-links');
+    const navToggle = document.getElementById('nav-toggle');
+    
+    if (navLinks && navToggle && 
+        !navLinks.contains(e.target) && 
+        !navToggle.contains(e.target)) {
+        navLinks.classList.remove('mobile-show');
     }
+});
+// Close mobile menu when clicking a nav link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.remove('mobile-show');
+    });
 });
 
 
@@ -290,20 +299,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const notificationDropdown = document.createElement('div');
         notificationDropdown.className = 'notification-dropdown';
         notificationDropdown.innerHTML = `
-            <div class="notification-header" style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);">
+            <div class="notification-header" style="padding: 0.75rem 1rem; background-color: var(--text); color: var(--card); border-bottom: 1px solid var(--border);">
                 <h4 style="margin: 0;">Notifications</h4>
             </div>
-            <div class="notification-item">
-                <div class="notification-text">New assignment posted in Web Engineering</div>
-                <div class="notification-time">2 hours ago</div>
+            <div class="notification-item" style="padding: 0.75rem 1rem; background-color: var(--text); color: var(--card); border-bottom: 1px solid var(--border);" >
+                <div class="notification-text" >New assignment posted in Web Engineering</div>
+                <div class="notification-time" style = "color: #222;">2 hours ago</div>
             </div>
-            <div class="notification-item">
+            <div class="notification-item" style="padding: 0.75rem 1rem; background-color: var(--text); color: var(--card); border-bottom: 1px solid var(--border);">
                 <div class="notification-text">Your submission was graded in Software Engineering</div>
-                <div class="notification-time">1 day ago</div>
+                <div class="notification-time" style = "color: #222;">1 day ago</div>
             </div>
-            <div class="notification-item" style="border-bottom: none;">
+            <div class="notification-item" style="padding: 0.75rem 1rem; background-color: var(--text); color: var(--card); border-bottom: 1px solid var(--border);">
                 <div class="notification-text">Upcoming deadline: PBL Project due tomorrow</div>
-                <div class="notification-time">2 days ago</div>
+                <div class="notification-time" style = "color: #222;">2 days ago</div>
             </div>
         `;
         notificationBell.appendChild(notificationDropdown);
