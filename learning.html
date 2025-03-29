@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Learning | Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Page-specific enhancements */
+        .learning-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .learning-header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .learning-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        .learning-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .stat-icon {
+            font-size: 1.5rem;
+        }
+        
+        .stat-content h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-content p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* Filter controls */
+        .filter-controls {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            background-color: var(--bg);
+            color: var(--text-light);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .filter-btn:hover:not(.active) {
+            background-color: var(--hover);
+        }
+        
+        /* Course cards enhancement */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .course-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .learning-header {
+                padding: 2rem 1.5rem;
+            }
+            
+            .learning-header h1 {
+                font-size: 2rem;
+            }
+            
+            .stat-card {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Top Navigation -->
+    <header class="top-nav">
+        <div class="nav-container">
+            <button class="menu-toggle icon-btn" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> Student Portal</h1>
+            </div>
+            
+            <nav class="nav-links">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li class="active"><a href="learning.html"><i class="fas fa-book-open"></i> Learning</a></li>
+                    <li><a href="assignments.html"><i class="fas fa-tasks"></i> Assignments</a></li>
+                    <li><a href="achievements.html"><i class="fas fa-trophy"></i> Achievements</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-controls">
+                <button id="theme-switcher" class="icon-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="notification-bell icon-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">2</span>
+                </div>
+                <div class="user-profile" id="user-profile-btn">
+                    <img src="https://ih1.redbubble.net/image.2513778679.2457/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="User">
+                    <span>Subhan Raza</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Learning Header Section -->
+        <div class="learning-header">
+            <h1>My Learning Journey</h1>
+            <p>Track your progress and discover new courses</p>
+            
+            <div class="learning-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>5</h3>
+                        <p>Active Courses</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>12</h3>
+                        <p>Completed Courses</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>78%</h3>
+                        <p>Overall Progress</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>24h</h3>
+                        <p>Learning Streak</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Courses Section -->
+        <section class="courses-section">
+            <div class="section-header">
+                <h2>Your Courses</h2>
+                <div class="filter-controls">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">In Progress</button>
+                    <button class="filter-btn">Completed</button>
+                    <button class="filter-btn">New</button>
+                </div>
+            </div>
+            
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-icon" style="background-color: var(--primary);">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="course-details">
+                        <h4>Web Engineering</h4>
+                        <p class="instructor">Engr. Zaib Ul Nissa</p>
+                        <div class="progress-container">
+                            <span>35/48 classes (75%)</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <button class="action-btn">Continue <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-icon" style="background-color: var(--secondary);">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="course-details">
+                        <h4>Software Engineering</h4>
+                        <p class="instructor">Engr. Faiz Nadeem</p>
+                        <div class="progress-container">
+                            <span>30/48 classes (65%)</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                        </div>
+                        <button class="action-btn">Continue <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-icon" style="background-color: var(--accent);">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <div class="course-details">
+                        <h4>Computer Networks</h4>
+                        <p class="instructor">Engr. Kainat Memon</p>
+                        <div class="progress-container">
+                            <span>32/48 classes (70%)</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <button class="action-btn">Continue <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-icon" style="background-color: var(--success);">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="course-details">
+                        <h4>Database Management Systems</h4>
+                        <p class="instructor">Dr. Zartasha Baloch</p>
+                        <div class="progress-container">
+                            <span>48/48 classes (100%)</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <button class="action-btn">Completed <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-icon" style="background-color: var(--warning);">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="course-details">
+                        <h4>Discrete Structures</h4>
+                        <p class="instructor">Engr. Kinza Shah</p>
+                        <div class="progress-container">
+                            <span>48/48 classes (100%)</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <button class="action-btn">Completed <i class="fas fa-check"></i></button>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-icon" style="background-color: var(--danger);">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="course-details">
+                        <h4>Data Structures and Algorithms</h4>
+                        <p class="instructor">Dr. Samamr Zai</p>
+                        <div class="progress-container">
+                            <span>48/48 classes (100%)</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <button class="action-btn completed-btn">Completed <i class="fas fa-check"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Recommended Courses Section -->
+        <section class="courses-section">
+            <div class="section-header">
+                <h2>Recommended For You</h2>
+                <a href="#" class="see-all">View All <i class="fas fa-chevron-right"></i></a>
+            </div>
+            
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-icon" style="background-color: #6a1b9a;">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="course-details">
+                        <h4>Artificial Intelligence</h4>
+                        <p class="instructor">Dr. Aammar Tufail</p>
+                        <div class="progress-container">
+                            <span>Not Enrolled</span>
+                            <button class="action-btn enroll-btn">Enroll Now <i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-icon" style="background-color: #0277bd;">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="course-details">
+                        <h4>Mobile App Development</h4>
+                        <p class="instructor">Engr. Bilal Ahmed</p>
+                        <div class="progress-container">
+                            <span>Not Enrolled</span>
+                            <button class="action-btn enroll-btn">Enroll Now <i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-icon" style="background-color: #2e7d32;">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="course-details">
+                        <h4>Cyber Security</h4>
+                        <p class="instructor">Dr. Aisha Rahman</p>
+                        <div class="progress-container">
+                            <span>Not Enrolled</span>
+                            <button class="action-btn enroll-btn">Enroll Now <i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Here you would typically filter the courses
+                // For demo purposes, we'll just log the filter
+                console.log(`Filtering by: ${this.textContent}`);
+            });
+        });
+        
+        // Enroll button functionality
+        document.querySelectorAll('.enroll-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const courseCard = this.closest('.course-card');
+                const courseTitle = courseCard.querySelector('h4').textContent;
+                
+                // Show confirmation (in a real app, this would be a proper modal)
+                if (confirm(`Enroll in ${courseTitle}?`)) {
+                    // Change button state
+                    this.innerHTML = 'Enrolled <i class="fas fa-check"></i>';
+                    this.classList.remove('enroll-btn');
+                    this.classList.add('enrolled-btn');
+                    this.disabled = true;
+                    
+                    // Update progress text
+                    const progressContainer = this.closest('.progress-container');
+                    progressContainer.querySelector('span').textContent = '0/48 classes (0%)';
+                    
+                    // Add progress bar if not exists
+                    if (!progressContainer.querySelector('.progress-bar')) {
+                        const progressBar = document.createElement('div');
+                        progressBar.className = 'progress-bar';
+                        progressBar.innerHTML = '<div class="progress-fill" style="width: 0%"></div>';
+                        progressContainer.insertBefore(progressBar, this);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community | Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Page-specific enhancements */
+        .community-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .community-header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .community-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        .community-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .stat-icon {
+            font-size: 1.5rem;
+        }
+        
+        .stat-content h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-content p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* Community layout */
+        .community-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+        
+        @media (max-width: 992px) {
+            .community-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Discussion feed */
+        .discussion-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .discussion-card {
+            background-color: var(--card);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .discussion-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .discussion-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .discussion-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+        
+        .discussion-author {
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .discussion-meta {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .discussion-course {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .discussion-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .discussion-image {
+            width: 100%;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            max-height: 300px;
+            object-fit: cover;
+        }
+        
+        .discussion-actions {
+            display: flex;
+            gap: 1.5rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .action-btn:hover {
+            color: var(--primary);
+        }
+        
+        .action-btn.liked {
+            color: var(--danger);
+        }
+        
+        /* New post composer */
+        .post-composer {
+            background-color: var(--card);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .composer-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .composer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+        
+        .composer-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            resize: none;
+            margin-bottom: 1rem;
+            background-color: var(--bg);
+            color: var(--text);
+        }
+        
+        .composer-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .composer-options {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .composer-option {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        
+        .composer-option:hover {
+            color: var(--primary);
+        }
+        
+        .post-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .post-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Community sidebar */
+        .community-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .sidebar-card {
+            background-color: var(--card);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .sidebar-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Study groups */
+        .study-group {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .study-group:last-child {
+            border-bottom: none;
+        }
+        
+        .group-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .group-info {
+            flex: 1;
+        }
+        
+        .group-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .group-meta {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .join-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .join-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .join-btn.joined {
+            background-color: var(--success);
+        }
+        
+        /* Upcoming events */
+        .event-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .event-item:last-child {
+            border-bottom: none;
+        }
+        
+        .event-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .event-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .event-meta {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .community-header {
+                padding: 2rem 1.5rem;
+            }
+            
+            .community-header h1 {
+                font-size: 2rem;
+            }
+            
+            .stat-card {
+                min-width: 100%;
+            }
+            
+            .discussion-actions {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Top Navigation -->
+    <header class="top-nav">
+        <div class="nav-container">
+            <button class="menu-toggle icon-btn" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> Student Portal</h1>
+            </div>
+            
+            <nav class="nav-links">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="learning.html"><i class="fas fa-book-open"></i> Learning</a></li>
+                    <li><a href="assignments.html"><i class="fas fa-tasks"></i> Assignments</a></li>
+                    <li><a href="achievements.html"><i class="fas fa-trophy"></i> Achievements</a></li>
+                    <li class="active"><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-controls">
+                <button id="theme-switcher" class="icon-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="notification-bell icon-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="user-profile" id="user-profile-btn">
+                    <img src="https://ih1.redbubble.net/image.2513778679.2457/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="User">
+                    <span>Subhan Raza</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Community Header Section -->
+        <div class="community-header">
+            <h1>Student Community</h1>
+            <p>Connect with peers, join discussions, and collaborate</p>
+            
+            <div class="community-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>1,248</h3>
+                        <p>Active Students</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>327</h3>
+                        <p>Discussions Today</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>42</h3>
+                        <p>Study Groups</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>8</h3>
+                        <p>Upcoming Events</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Community Content -->
+        <div class="community-grid">
+            <!-- Discussion Feed -->
+            <div class="community-main">
+                <!-- Post Composer -->
+                <div class="post-composer">
+                    <div class="composer-header">
+                        <img src="https://ih1.redbubble.net/image.2513778679.2457/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="User" class="composer-avatar">
+                        <div>
+                            <div class="discussion-author">Subhan Raza</div>
+                            <div class="discussion-meta">Computer Science, Semester 5</div>
+                        </div>
+                    </div>
+                    <textarea class="composer-textarea" placeholder="Share your thoughts with the community..."></textarea>
+                    <div class="composer-footer">
+                        <div class="composer-options">
+                            <button class="composer-option" title="Add image">
+                                <i class="fas fa-image"></i>
+                            </button>
+                            <button class="composer-option" title="Add file">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                            <button class="composer-option" title="Add poll">
+                                <i class="fas fa-poll"></i>
+                            </button>
+                        </div>
+                        <button class="post-btn">Post</button>
+                    </div>
+                </div>
+                
+                <!-- Discussion Feed -->
+                <div class="discussion-feed">
+                    <!-- Discussion 1 -->
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="User" class="discussion-avatar">
+                            <div>
+                                <div class="discussion-author">Aisha Khan</div>
+                                <div class="discussion-meta">
+                                    <span class="discussion-course">Web Engineering</span>
+                                    <span>2 hours ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="discussion-content">
+                            <p>Has anyone completed the PBL project for Web Engineering? I'm having trouble with the user authentication part. Specifically, I can't get the session management to work properly with the backend API.</p>
+                            <img src="https://via.placeholder.com/800x400?text=Code+Snippet" alt="Code" class="discussion-image">
+                        </div>
+                        <div class="discussion-actions">
+                            <button class="action-btn">
+                                <i class="far fa-thumbs-up"></i> <span>24</span>
+                            </button>
+                            <button class="action-btn">
+                                <i class="far fa-comment"></i> <span>8</span>
+                            </button>
+                            <button class="action-btn">
+                                <i class="fas fa-share"></i> <span>Share</span>
+                            </button>
+                            <button class="action-btn">
+                                <i class="far fa-bookmark"></i> <span>Save</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Discussion 2 -->
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="discussion-avatar">
+                            <div>
+                                <div class="discussion-author">Bilal Ahmed</div>
+                                <div class="discussion-meta">
+                                    <span class="discussion-course">Software Engineering</span>
+                                    <span>5 hours ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="discussion-content">
+                            <p>I'm forming a study group for the upcoming Software Engineering exam. We'll meet every Tuesday and Thursday at 4 PM in the CS lab. Planning to cover all design patterns and architectural concepts. Who's interested?</p>
+                        </div>
+                        <div class="discussion-actions">
+                            <button class="action-btn">
+                                <i class="far fa-thumbs-up"></i> <span>15</span>
+                            </button>
+                            <button class="action-btn">
+                                <i class="far fa-comment"></i> <span>12</span>
+                            </button>
+                            <button class="action-btn">
+                                <i class="fas fa-share"></i> <span>Share</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Discussion 3 -->
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="User" class="discussion-avatar">
+                            <div>
+                                <div class="discussion-author">Fatima Ali</div>
+                                <div class="discussion-meta">
+                                    <span class="discussion-course">Computer Networks</span>
+                                    <span>1 day ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="discussion-content">
+                            <p>Just found this amazing resource for understanding TCP/IP protocols. It has interactive diagrams that really help visualize the packet flow. Highly recommended for anyone struggling with the concepts!</p>
+                            <div class="discussion-actions">
+                                <button class="action-btn liked">
+                                    <i class="fas fa-thumbs-up"></i> <span>42</span>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="far fa-comment"></i> <span>7</span>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-share"></i> <span>Share</span>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="far fa-bookmark"></i> <span>Saved</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Community Sidebar -->
+            <div class="community-sidebar">
+                <!-- Study Groups -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-user-friends"></i> Study Groups
+                    </h3>
+                    <div class="study-groups-list">
+                        <div class="study-group">
+                            <div class="group-avatar" style="background-color: var(--primary);">SE</div>
+                            <div class="group-info">
+                                <div class="group-name">Software Engineering</div>
+                                <div class="group-meta">
+                                    <span>12 members</span>
+                                    <span>Meets Tue/Thu</span>
+                                </div>
+                            </div>
+                            <button class="join-btn joined">Joined</button>
+                        </div>
+                        <div class="study-group">
+                            <div class="group-avatar" style="background-color: var(--secondary);">WE</div>
+                            <div class="group-info">
+                                <div class="group-name">Web Engineering</div>
+                                <div class="group-meta">
+                                    <span>8 members</span>
+                                    <span>Meets Mon/Wed</span>
+                                </div>
+                            </div>
+                            <button class="join-btn">Join</button>
+                        </div>
+                        <div class="study-group">
+                            <div class="group-avatar" style="background-color: var(--accent);">CN</div>
+                            <div class="group-info">
+                                <div class="group-name">Computer Networks</div>
+                                <div class="group-meta">
+                                    <span>5 members</span>
+                                    <span>Meets Fri</span>
+                                </div>
+                            </div>
+                            <button class="join-btn">Join</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Upcoming Events -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-calendar-alt"></i> Upcoming Events
+                    </h3>
+                    <div class="events-list">
+                        <div class="event-item">
+                            <div class="event-date">
+                                <i class="fas fa-circle" style="color: var(--primary);"></i> Apr 5, 2023
+                            </div>
+                            <div class="event-title">Guest Lecture: AI in Web Development</div>
+                            <div class="event-meta">
+                                <span>4:00 PM</span>
+                                <span>CS Auditorium</span>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <i class="fas fa-circle" style="color: var(--secondary);"></i> Apr 8, 2023
+                            </div>
+                            <div class="event-title">Hackathon Registration Deadline</div>
+                            <div class="event-meta">
+                                <span>Online</span>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <i class="fas fa-circle" style="color: var(--accent);"></i> Apr 12, 2023
+                            </div>
+                            <div class="event-title">Career Fair Prep Workshop</div>
+                            <div class="event-meta">
+                                <span>2:30 PM</span>
+                                <span>Career Center</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Popular Resources -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-fire"></i> Trending Resources
+                    </h3>
+                    <div class="resources-list">
+                        <div class="event-item">
+                            <div class="event-title">React.js Crash Course</div>
+                            <div class="event-meta">
+                                <span>128 downloads</span>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-title">Database Design Cheat Sheet</div>
+                            <div class="event-meta">
+                                <span>97 downloads</span>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-title">Algorithm Complexity Guide</div>
+                            <div class="event-meta">
+                                <span>84 downloads</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Like button functionality
+        document.querySelectorAll('.action-btn .fa-thumbs-up').forEach(icon => {
+            icon.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const btn = this.closest('.action-btn');
+                const count = btn.querySelector('span');
+                
+                if (btn.classList.contains('liked')) {
+                    btn.classList.remove('liked');
+                    this.classList.replace('fas', 'far');
+                    count.textContent = parseInt(count.textContent) - 1;
+                } else {
+                    btn.classList.add('liked');
+                    this.classList.replace('far', 'fas');
+                    count.textContent = parseInt(count.textContent) + 1;
+                }
+            });
+        });
+        
+        // Join group functionality
+        document.querySelectorAll('.join-btn:not(.joined)').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const group = this.closest('.study-group');
+                const groupName = group.querySelector('.group-name').textContent;
+                
+                if (confirm(`Join ${groupName} study group?`)) {
+                    this.textContent = 'Joined';
+                    this.classList.add('joined');
+                    
+                    // Update member count
+                    const meta = group.querySelector('.group-meta span:first-child');
+                    if (meta) {
+                        const current = parseInt(meta.textContent);
+                        meta.textContent = `${current + 1} members`;
+                    }
+                }
+            });
+        });
+        
+        // Post composer functionality
+        const postBtn = document.querySelector('.post-btn');
+        const textarea = document.querySelector('.composer-textarea');
+        
+        postBtn.addEventListener('click', function() {
+            if (textarea.value.trim() === '') {
+                alert('Please write something to post!');
+                return;
+            }
+            
+            // In a real app, this would send to server
+            alert('Your post has been shared with the community!');
+            textarea.value = '';
+        });
+        
+        // Simulate clicking on discussion cards
+        document.querySelectorAll('.discussion-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't trigger if clicking on interactive elements
+                if (e.target.tagName === 'BUTTON' || e.target.tagName === 'I') {
+                    return;
+                }
+                
+                // In a real app, this would navigate to full discussion
+                console.log('Viewing discussion:', this.querySelector('.discussion-author').textContent);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments | Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Page-specific enhancements */
+        .assignments-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .assignments-header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .assignments-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        .assignments-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .stat-icon {
+            font-size: 1.5rem;
+        }
+        
+        .stat-content h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-content p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* Filter controls */
+        .filter-controls {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            background-color: var(--bg);
+            color: var(--text-light);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .filter-btn:hover:not(.active) {
+            background-color: var(--hover);
+        }
+        
+        /* Assignment cards */
+        .assignment-card {
+            background-color: var(--card);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .assignment-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .assignment-card.urgent {
+            border-left-color: var(--danger);
+            animation: pulse 2s infinite;
+        }
+        
+        .assignment-card.completed {
+            border-left-color: var(--success);
+            opacity: 0.8;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 35, 60, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 35, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 35, 60, 0); }
+        }
+        
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .assignment-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .assignment-course {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .assignment-due {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .assignment-due.urgent {
+            color: var(--danger);
+            font-weight: 500;
+        }
+        
+        .assignment-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .assignment-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .primary-btn {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .primary-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .secondary-btn {
+            background-color: var(--bg);
+            color: var(--text);
+        }
+        
+        .secondary-btn:hover {
+            background-color: var(--hover);
+        }
+        
+        .completed-btn {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .assignments-header {
+                padding: 2rem 1.5rem;
+            }
+            
+            .assignments-header h1 {
+                font-size: 2rem;
+            }
+            
+            .stat-card {
+                min-width: 100%;
+            }
+            
+            .assignment-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .assignment-actions {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .action-btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Top Navigation -->
+    <header class="top-nav">
+        <div class="nav-container">
+            <button class="menu-toggle icon-btn" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> Student Portal</h1>
+            </div>
+            
+            <nav class="nav-links">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="learning.html"><i class="fas fa-book-open"></i> Learning</a></li>
+                    <li class="active"><a href="assignments.html"><i class="fas fa-tasks"></i> Assignments</a></li>
+                    <li><a href="achievements.html"><i class="fas fa-trophy"></i> Achievements</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-controls">
+                <button id="theme-switcher" class="icon-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="notification-bell icon-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="user-profile" id="user-profile-btn">
+                    <img src="https://ih1.redbubble.net/image.2513778679.2457/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="User">
+                    <span>Subhan Raza</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Assignments Header Section -->
+        <div class="assignments-header">
+            <h1>Your Assignments</h1>
+            <p>Track deadlines and submit your work</p>
+            
+            <div class="assignments-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>5</h3>
+                        <p>Pending</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>12</h3>
+                        <p>Completed</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>2</h3>
+                        <p>Urgent</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>3</h3>
+                        <p>Due This Week</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Assignments Section -->
+        <section class="assignments-section">
+            <div class="section-header">
+                <h2>Current Assignments</h2>
+                <div class="filter-controls">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Pending</button>
+                    <button class="filter-btn">Completed</button>
+                    <button class="filter-btn">Urgent</button>
+                    <button class="filter-btn">Graded</button>
+                </div>
+            </div>
+            
+            <div class="assignments-list">
+                <!-- Urgent Assignment -->
+                <div class="assignment-card urgent">
+                    <div class="assignment-header">
+                        <div>
+                            <span class="assignment-course">Web Engineering</span>
+                            <h3 class="assignment-title">PBL Project Submission</h3>
+                        </div>
+                        <span class="assignment-status" style="color: var(--danger);">URGENT</span>
+                    </div>
+                    
+                    <div class="assignment-due urgent">
+                        <i class="fas fa-clock"></i>
+                        <span>Due tomorrow at 11:59 PM</span>
+                    </div>
+                    
+                    <div class="assignment-description">
+                        Create a responsive web application using HTML, CSS, and JavaScript. The application should include user authentication and CRUD functionality.
+                    </div>
+                    
+                    <div class="assignment-actions">
+                        <button class="action-btn primary-btn">
+                            <i class="fas fa-upload"></i> Submit Work
+                        </button>
+                        <button class="action-btn secondary-btn">
+                            <i class="fas fa-file-alt"></i> View Requirements
+                        </button>
+                        <button class="action-btn secondary-btn">
+                            <i class="fas fa-question-circle"></i> Get Help
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Regular Assignment -->
+                <div class="assignment-card">
+                    <div class="assignment-header">
+                        <div>
+                            <span class="assignment-course">Software Engineering</span>
+                            <h3 class="assignment-title">Design Patterns Report</h3>
+                        </div>
+                        <span class="assignment-status">Due in 3 days</span>
+                    </div>
+                    
+                    <div class="assignment-due">
+                        <i class="fas fa-clock"></i>
+                        <span>Due April 10 at 11:59 PM</span>
+                    </div>
+                    
+                    <div class="assignment-description">
+                        Write a comprehensive report comparing at least 3 design patterns. Include examples of where each pattern would be appropriate.
+                    </div>
+                    
+                    <div class="assignment-actions">
+                        <button class="action-btn primary-btn">
+                            <i class="fas fa-upload"></i> Submit Work
+                        </button>
+                        <button class="action-btn secondary-btn">
+                            <i class="fas fa-file-alt"></i> View Requirements
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Completed Assignment -->
+                <div class="assignment-card completed">
+                    <div class="assignment-header">
+                        <div>
+                            <span class="assignment-course">Computer Networks</span>
+                            <h3 class="assignment-title">TCP/IP Protocol Analysis</h3>
+                        </div>
+                        <span class="assignment-status" style="color: var(--success);">COMPLETED</span>
+                    </div>
+                    
+                    <div class="assignment-due">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Submitted on March 25</span>
+                    </div>
+                    
+                    <div class="assignment-description">
+                        Analyze the TCP/IP protocol stack and explain the function of each layer with appropriate diagrams.
+                    </div>
+                    
+                    <div class="assignment-actions">
+                        <button class="action-btn completed-btn">
+                            <i class="fas fa-check"></i> Completed
+                        </button>
+                        <button class="action-btn secondary-btn">
+                            <i class="fas fa-eye"></i> View Submission
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Graded Assignment -->
+                <div class="assignment-card">
+                    <div class="assignment-header">
+                        <div>
+                            <span class="assignment-course">Database Systems</span>
+                            <h3 class="assignment-title">SQL Query Optimization</h3>
+                        </div>
+                        <span class="assignment-status" style="color: var(--success);">GRADED: 92/100</span>
+                    </div>
+                    
+                    <div class="assignment-due">
+                        <i class="fas fa-star"></i>
+                        <span>Graded on March 20</span>
+                    </div>
+                    
+                    <div class="assignment-description">
+                        Optimize the provided SQL queries and explain your optimization strategies. Include execution plans.
+                    </div>
+                    
+                    <div class="assignment-actions">
+                        <button class="action-btn secondary-btn">
+                            <i class="fas fa-eye"></i> View Feedback
+                        </button>
+                        <button class="action-btn secondary-btn">
+                            <i class="fas fa-download"></i> Download Solution
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Upcoming Assignments Section -->
+        <section class="assignments-section">
+            <div class="section-header">
+                <h2>Upcoming Assignments</h2>
+                <a href="#" class="see-all">View Calendar <i class="fas fa-chevron-right"></i></a>
+            </div>
+            
+            <div class="assignments-list">
+                <div class="assignment-card">
+                    <div class="assignment-header">
+                        <div>
+                            <span class="assignment-course">Artificial Intelligence</span>
+                            <h3 class="assignment-title">Neural Network Implementation</h3>
+                        </div>
+                        <span class="assignment-status">Due in 2 weeks</span>
+                    </div>
+                    
+                    <div class="assignment-due">
+                        <i class="fas fa-clock"></i>
+                        <span>Due April 15 at 11:59 PM</span>
+                    </div>
+                    
+                    <div class="assignment-description">
+                        Implement a basic neural network from scratch using Python to solve a classification problem.
+                    </div>
+                    
+                    <div class="assignment-actions">
+                        <button class="action-btn secondary-btn">
+                            <i class="fas fa-file-alt"></i> View Requirements
+                        </button>
+                        <button class="action-btn secondary-btn">
+                            <i class="fas fa-plus"></i> Add to Planner
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="assignment-card">
+                    <div class="assignment-header">
+                        <div>
+                            <span class="assignment-course">Mobile App Development</span>
+                            <h3 class="assignment-title">React Native App Prototype</h3>
+                        </div>
+                        <span class="assignment-status">Due in 3 weeks</span>
+                    </div>
+                    
+                    <div class="assignment-due">
+                        <i class="fas fa-clock"></i>
+                        <span>Due April 22 at 11:59 PM</span>
+                    </div>
+                    
+                    <div class="assignment-description">
+                        Create a prototype mobile application using React Native with at least 3 screens and basic navigation.
+                    </div>
+                    
+                    <div class="assignment-actions">
+                        <button class="action-btn secondary-btn">
+                            <i class="fas fa-file-alt"></i> View Requirements
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.textContent.toLowerCase();
+                const assignments = document.querySelectorAll('.assignment-card');
+                
+                assignments.forEach(assignment => {
+                    assignment.style.display = 'block';
+                    
+                    if (filter === 'pending') {
+                        if (assignment.classList.contains('completed')) {  // Fixed syntax error here
+                            assignment.style.display = 'none';
+                        }
+                    } 
+                    else if (filter === 'completed') {
+                        if (!assignment.classList.contains('completed')) {
+                            assignment.style.display = 'none';
+                        }
+                    }
+                    else if (filter === 'urgent') {
+                        if (!assignment.classList.contains('urgent')) {
+                            assignment.style.display = 'none';
+                        }
+                    }
+                    else if (filter === 'graded') {
+                        const status = assignment.querySelector('.assignment-status');
+                        if (!status || !status.textContent.includes('GRADED')) {
+                            assignment.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+    
+        // Simulate submission
+        document.querySelectorAll('.primary-btn').forEach(btn => {
+            if (!btn.classList.contains('completed-btn')) {
+                btn.addEventListener('click', function() {
+                    const assignmentCard = this.closest('.assignment-card');
+                    const title = assignmentCard.querySelector('.assignment-title').textContent;
+                    
+                    // In a real app, this would be a proper modal
+                    if (confirm(`Submit your work for "${title}"?`)) {
+                        // Change button state
+                        this.innerHTML = '<i class="fas fa-check"></i> Submitted';
+                        this.classList.remove('primary-btn');
+                        this.classList.add('completed-btn');
+                        
+                        // Update status
+                        const status = assignmentCard.querySelector('.assignment-status');
+                        if (status) {
+                            status.textContent = 'SUBMITTED';
+                            status.style.color = 'var(--success)';
+                        }
+                        
+                        // Update due date display
+                        const due = assignmentCard.querySelector('.assignment-due');
+                        if (due) {
+                            due.innerHTML = '<i class="fas fa-check-circle"></i> Submitted today';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+    
+</body>
+</html>

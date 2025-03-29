@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements | Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Page-specific enhancements */
+        .achievements-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .achievements-header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .achievements-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        .achievements-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .stat-icon {
+            font-size: 1.5rem;
+        }
+        
+        .stat-content h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-content p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* Filter controls */
+        .filter-controls {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            background-color: var(--bg);
+            color: var(--text-light);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .filter-btn:hover:not(.active) {
+            background-color: var(--hover);
+        }
+        
+        /* Achievement cards */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .achievement-card {
+            background-color: var(--card);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .achievement-card.locked {
+            opacity: 0.6;
+            filter: grayscale(80%);
+        }
+        
+        .achievement-badge {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .achievement-badge::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, currentColor 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .achievement-badge.gold {
+            background-color: #FFD700;
+            color: #996515;
+        }
+        
+        .achievement-badge.silver {
+            background-color: #C0C0C0;
+            color: #7A7A7A;
+        }
+        
+        .achievement-badge.bronze {
+            background-color: #CD7F32;
+            color: #804A00;
+        }
+        
+        .achievement-badge.platinum {
+            background: linear-gradient(135deg, #E5E4E2, #CECECE);
+            color: #555555;
+        }
+        
+        .achievement-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        
+        .achievement-description {
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .achievement-progress {
+            height: 6px;
+            background-color: var(--border);
+            border-radius: 3px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+        
+        .achievement-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .achievement-date {
+            font-style: italic;
+        }
+        
+        .locked-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .locked-overlay i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Milestone section */
+        .milestone-tracker {
+            background-color: var(--card);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .milestone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .milestone-bar {
+            height: 12px;
+            background-color: var(--border);
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .milestone-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 6px;
+            width: 65%;
+        }
+        
+        .milestone-markers {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .milestone-marker {
+            width: 20px;
+            height: 20px;
+            background-color: var(--bg);
+            border: 3px solid var(--border);
+            border-radius: 50%;
+            margin-top: -4px;
+            position: relative;
+        }
+        
+        .milestone-marker.reached {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .milestone-marker.current {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+        
+        .milestone-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+        }
+        
+        .milestone-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            text-align: center;
+            width: 20%;
+        }
+        
+        .milestone-label.active {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(247, 37, 133, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(247, 37, 133, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(247, 37, 133, 0); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .achievements-header {
+                padding: 2rem 1.5rem;
+            }
+            
+            .achievements-header h1 {
+                font-size: 2rem;
+            }
+            
+            .stat-card {
+                min-width: 100%;
+            }
+            
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Top Navigation -->
+    <header class="top-nav">
+        <div class="nav-container">
+            <button class="menu-toggle icon-btn" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> Student Portal</h1>
+            </div>
+            
+            <nav class="nav-links">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="learning.html"><i class="fas fa-book-open"></i> Learning</a></li>
+                    <li><a href="assignments.html"><i class="fas fa-tasks"></i> Assignments</a></li>
+                    <li class="active"><a href="achievements.html"><i class="fas fa-trophy"></i> Achievements</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-controls">
+                <button id="theme-switcher" class="icon-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="notification-bell icon-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">1</span>
+                </div>
+                <div class="user-profile" id="user-profile-btn">
+                    <img src="https://ih1.redbubble.net/image.2513778679.2457/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="User">
+                    <span>Subhan Raza</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Achievements Header Section -->
+        <div class="achievements-header">
+            <h1>Your Achievements</h1>
+            <p>Celebrate your academic milestones and accomplishments</p>
+            
+            <div class="achievements-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>24</h3>
+                        <p>Total Achievements</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>5</h3>
+                        <p>Gold Badges</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>87%</h3>
+                        <p>Completion Rate</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>15</h3>
+                        <p>Day Streak</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Milestone Tracker -->
+        <div class="milestone-tracker">
+            <div class="milestone-header">
+                <h2>Next Milestone: Scholar Level</h2>
+                <span>65% complete</span>
+            </div>
+            <div class="milestone-bar">
+                <div class="milestone-progress"></div>
+                <div class="milestone-markers">
+                    <div class="milestone-marker reached"></div>
+                    <div class="milestone-marker reached"></div>
+                    <div class="milestone-marker current"></div>
+                    <div class="milestone-marker"></div>
+                    <div class="milestone-marker"></div>
+                </div>
+            </div>
+            <div class="milestone-labels">
+                <div class="milestone-label active">Starter</div>
+                <div class="milestone-label active">Explorer</div>
+                <div class="milestone-label active">Achiever</div>
+                <div class="milestone-label">Scholar</div>
+                <div class="milestone-label">Master</div>
+            </div>
+        </div>
+        
+        <!-- Achievements Section -->
+        <section class="achievements-section">
+            <div class="section-header">
+                <h2>Your Badges</h2>
+                <div class="filter-controls">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Completed</button>
+                    <button class="filter-btn">In Progress</button>
+                    <button class="filter-btn">Gold</button>
+                    <button class="filter-btn">Silver</button>
+                </div>
+            </div>
+            
+            <div class="achievements-grid">
+                <!-- Completed Achievement -->
+                <div class="achievement-card">
+                    <div class="achievement-badge gold">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="achievement-title">Perfect Score</h3>
+                    <p class="achievement-description">Achieve 100% on any assignment or exam</p>
+                    <div class="achievement-meta">
+                        <span class="achievement-date">Earned: Mar 15, 2023</span>
+                        <span class="achievement-points">50 pts</span>
+                    </div>
+                </div>
+                
+                <!-- Completed Achievement -->
+                <div class="achievement-card">
+                    <div class="achievement-badge platinum">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3 class="achievement-title">Course Master</h3>
+                    <p class="achievement-description">Complete all requirements for a course with distinction</p>
+                    <div class="achievement-meta">
+                        <span class="achievement-date">Earned: Feb 28, 2023</span>
+                        <span class="achievement-points">100 pts</span>
+                    </div>
+                </div>
+                
+                <!-- In Progress Achievement -->
+                <div class="achievement-card">
+                    <div class="achievement-badge silver">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="achievement-title">Reading Champion</h3>
+                    <p class="achievement-description">Complete all recommended readings for 3 courses</p>
+                    <div class="achievement-progress">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                    <div class="achievement-meta">
+                        <span>2 of 3 courses completed</span>
+                        <span class="achievement-points">30 pts</span>
+                    </div>
+                </div>
+                
+                <!-- Locked Achievement -->
+                <div class="achievement-card locked">
+                    <div class="achievement-badge bronze">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="achievement-title">Team Player</h3>
+                    <p class="achievement-description">Participate in 5 group projects</p>
+                    <div class="locked-overlay">
+                        <i class="fas fa-lock"></i>
+                        <span>Complete 2 more projects</span>
+                    </div>
+                    <div class="achievement-progress">
+                        <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                    <div class="achievement-meta">
+                        <span>3 of 5 projects</span>
+                        <span class="achievement-points">20 pts</span>
+                    </div>
+                </div>
+                
+                <!-- Completed Achievement -->
+                <div class="achievement-card">
+                    <div class="achievement-badge silver">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3 class="achievement-title">Perfect Attendance</h3>
+                    <p class="achievement-description">Attend all classes for a full semester</p>
+                    <div class="achievement-meta">
+                        <span class="achievement-date">Earned: Dec 20, 2022</span>
+                        <span class="achievement-points">40 pts</span>
+                    </div>
+                </div>
+                
+                <!-- Locked Achievement -->
+                <div class="achievement-card locked">
+                    <div class="achievement-badge gold">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="achievement-title">Innovator</h3>
+                    <p class="achievement-description">Submit an original project or research</p>
+                    <div class="locked-overlay">
+                        <i class="fas fa-lock"></i>
+                        <span>Not yet started</span>
+                    </div>
+                    <div class="achievement-meta">
+                        <span>0% complete</span>
+                        <span class="achievement-points">75 pts</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Recent Activity Section -->
+        <section class="achievements-section">
+            <div class="section-header">
+                <h2>Recent Achievements</h2>
+                <a href="#" class="see-all">View All Activity <i class="fas fa-chevron-right"></i></a>
+            </div>
+            
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <div class="achievement-badge bronze">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="achievement-title">Fast Learner</h3>
+                    <p class="achievement-description">Complete a course module 2 days ahead of schedule</p>
+                    <div class="achievement-meta">
+                        <span class="achievement-date">Earned: 2 days ago</span>
+                        <span class="achievement-points">15 pts</span>
+                    </div>
+                </div>
+                
+                <div class="achievement-card">
+                    <div class="achievement-badge silver">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="achievement-title">Code Wizard</h3>
+                    <p class="achievement-description">Solve 10 programming challenges with optimal solutions</p>
+                    <div class="achievement-meta">
+                        <span class="achievement-date">Earned: 1 week ago</span>
+                        <span class="achievement-points">35 pts</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.textContent.toLowerCase();
+                const achievements = document.querySelectorAll('.achievement-card');
+                
+                achievements.forEach(achievement => {
+                    achievement.style.display = 'block';
+                    
+                    if (filter === 'completed') {
+                        if (achievement.classList.contains('locked')) {  // Fixed syntax error here
+                            achievement.style.display = 'none';
+                        } else {
+                            const progress = achievement.querySelector('.achievement-progress');
+                            if (progress) {
+                                achievement.style.display = 'none';
+                            }
+                        }
+                    } 
+                    else if (filter === 'in progress') {
+                        if (!achievement.querySelector('.achievement-progress') || achievement.classList.contains('locked')) {
+                            achievement.style.display = 'none';
+                        }
+                    }
+                    else if (filter === 'gold') {
+                        const badge = achievement.querySelector('.achievement-badge');
+                        if (!badge || !badge.classList.contains('gold')) {
+                            achievement.style.display = 'none';
+                        }
+                    }
+                    else if (filter === 'silver') {
+                        const badge = achievement.querySelector('.achievement-badge');
+                        if (!badge || !badge.classList.contains('silver')) {
+                            achievement.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+    
+        // Achievement hover effects
+        document.querySelectorAll('.achievement-card:not(.locked)').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                const badge = this.querySelector('.achievement-badge');
+                if (badge) {
+                    badge.style.transform = 'scale(1.1) rotate(10deg)';
+                    badge.style.transition = 'transform 0.3s ease';
+                }
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                const badge = this.querySelector('.achievement-badge');
+                if (badge) {
+                    badge.style.transform = 'scale(1) rotate(0)';
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>

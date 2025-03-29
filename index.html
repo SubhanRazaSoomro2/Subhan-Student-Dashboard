@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-theme">
+    <!-- Top Navigation -->
+    <header class="top-nav">
+        <div class="nav-container">
+            <button class="menu-toggle icon-btn" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> Student Portal</h1>
+            </div>
+            
+            <nav class="nav-links">
+                <ul>
+                    <li class="active"><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="learning.html"><i class="fas fa-book-open"></i> Learning</a></li>
+                    <li><a href="assignments.html"><i class="fas fa-tasks"></i> Assignments</a></li>
+                    <li><a href="achievements.html"><i class="fas fa-trophy"></i> Achievements</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-controls">
+                <button id="theme-switcher" class="icon-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="notification-bell icon-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">2</span>
+                </div>
+                <div class="user-profile" id="user-profile-btn">
+                    <img src="https://ih1.redbubble.net/image.2513778679.2457/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="User">
+                    <div class="profile-info">
+                        <span class="user-name">Subhan Raza</span>
+                        <span class="user-email">subhan@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="welcome-card">
+                <div class="welcome-text">
+                    <h2>Welcome back, Subhan 22CS030!</h2>
+                    <p>You have 3 upcoming deadlines this week</p>
+                </div>
+                <div class="quick-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-chart-line"></i>
+                        <div>
+                            <span class="stat-value">85%</span>
+                            <span class="stat-label">Semester Progress</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-book"></i>
+                        <div>
+                            <span class="stat-value">5</span>
+                            <span class="stat-label">Active Courses</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Courses Section -->
+                <section class="courses-section">
+                    <div class="section-header">
+                        <h3>Your Courses</h3>
+                        <a href="#" class="see-all">View All <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                    
+                    <div class="courses-grid">
+                        <div class="course-card">
+                            <div class="course-icon" style="background-color: var(--primary);">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="course-details">
+                                <h4>Web Engineering</h4>
+                                <p class="instructor">Engr. Zaib Ul Nissa</p>
+                                <div class="progress-container">
+                                    <span>35/48 classes (75%)</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                                <button class="action-btn">Continue <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="course-card">
+                            <div class="course-icon" style="background-color: var(--secondary);">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <div class="course-details">
+                                <h4>Software Engineering</h4>
+                                <p class="instructor">Engr. Faiz Nadeem</p>
+                                <div class="progress-container">
+                                    <span>30/48 classes (65%)</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                                <button class="action-btn">Continue <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="course-card">
+                            <div class="course-icon" style="background-color: var(--accent);">
+                                <i class="fas fa-paint-brush"></i>
+                            </div>
+                            <div class="course-details">
+                                <h4>Computer Networks</h4>
+                                <p class="instructor">Engr. Kainat Memon</p>
+                                <div class="progress-container">
+                                    <span>32/48 classes (70%)</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 70%"></div>
+                                    </div>
+                                </div>
+                                <button class="action-btn">Continue <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="right-column">
+                <!-- Deadlines Section -->
+                <section class="deadlines-section">
+                    <div class="section-header">
+                        <h3>Upcoming Deadlines</h3>
+                        <button class="add-btn" id="add-deadline"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                    <div class="deadlines-list">
+                        <div class="deadline-item">
+    <div class="deadline-date" style="background-color: var(--accent);">
+                                <span class="day">30</span>
+                                <span class="month">Mar</span>
+                            </div>
+                            <div class="deadline-info">
+                                <h4>PBL Project</h4>
+                                <p>Web Engineering</p>
+                                <span class="time">Due: 11:59 PM</span>
+                            </div>
+                        </div>
+                        <div class="deadline-item">
+                            <div class="deadline-date" style="background-color: var(--primary);">
+                                <span class="day">10</span>
+                                <span class="month">Apr</span>
+                            </div>
+                            <div class="deadline-info">
+                                <h4>CEP Project</h4>
+                                <p>Web Engineering</p>
+                                <span class="time">Due: 11:59 PM</span>
+                            </div>
+                        </div>
+                        <div class="deadline-item">
+                            <div class="deadline-date" style="background-color: var(--secondary);">
+                                <span class="day">15</span>
+                                <span class="month">Apr</span>
+                            </div>
+                            <div class="deadline-info">
+                                <h4>Assignment</h4>
+                                <p>Software Engineering</p>
+                                <span class="time">Due: 11:59 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Resources Section -->
+                <section class="resources-section">
+                    <div class="section-header">
+                        <h3>Quick Resources</h3>
+                    </div>
+                    <div class="resources-grid">
+                        <div class="resource-card">
+                            <i class="fas fa-book"></i>
+                            <h4>Study Guide</h4>
+                        </div>
+                        <div class="resource-card">
+                            <i class="fas fa-file-alt"></i>
+                            <h4>Templates</h4>
+                        </div>
+                        <div class="resource-card">
+                            <i class="fas fa-podcast"></i>
+                            <h4>Podcasts</h4>
+                        </div>
+                        <div class="resource-card">
+                            <i class="fas fa-chart-bar"></i>
+                            <h4>Analytics</h4>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Deadline Modal -->
+    <div class="modal" id="deadline-modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Add New Deadline</h3>
+            <form id="deadline-form">
+                <div class="form-group">
+                    <label for="deadline-title">Title</label>
+                    <input type="text" id="deadline-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="deadline-course">Course</label>
+                    <select id="deadline-course" required>
+                        <option value="">Select Course</option>
+                        <option value="Web Engineering">Web Engineering</option>
+                        <option value="Software Engineering">Software Engineering</option>
+                        <option value="Computer Networks">Computer Networks</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="deadline-date">Due Date</label>
+                    <input type="date" id="deadline-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="deadline-time">Due Time</label>
+                    <input type="time" id="deadline-time" required>
+                </div>
+                <button type="submit" class="submit-btn">Add Deadline</button>
+            </form>
+        </div>
+    </div>
+
+  <!-- Profile Modal -->
+<div class="modal" id="profile-modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3>Update Profile</h3>
+        <div class="avatar-upload">
+            <div class="avatar-preview">
+                <img id="avatar-preview" src="https://ih1.redbubble.net/image.2513778679.2457/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="Preview">
+            </div>
+            <input type="file" id="avatar-input" accept="image/*">
+            <label for="avatar-input" class="upload-label">Change Photo</label>
+        </div>
+        <form id="profile-form">
+            <div class="form-group">
+                <label for="user-name">Name</label>
+                <input type="text" id="user-name" value="Subhan Raza" required>
+            </div>
+            <div class="form-group">
+                <label for="user-email">Email</label>
+                <input type="email" id="user-email" value="subhan@gmail.com" required>
+            </div>
+            <button type="submit" class="submit-btn">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
